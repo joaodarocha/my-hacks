@@ -9,7 +9,8 @@ let dateNow = () => new Date(Date.now());
 
 let bookingTime = {
     hours: 18,
-    minutes: dateNow().getDay() === (0 || 2) ? 0 : 5,
+    minutes: 0,
+    // minutes: dateNow().getDay() === (0 || 2) ? 0 : 5,
 }
 
 // Testing
@@ -72,18 +73,18 @@ function click2DaysFromNow() {
 }
 
 function clickInscrever() {
-    let xpath = "";
+    let xpath = "//div[text()='18:00 -> 18:45']";
     // Get the time of 18h class: 18:00 || 18:05
     /* The value returned by getDay() is an integer corresponding to the day of the week: 0 for Sunday, 1 for Monday, 2 for Tuesday, and so on. */
-    if (dateNow().getDay() === (0 || 2)) {
-        // Domingos e Terças
-        xpath = "//div[text()='18:00 -> 18:45']";
-    } else {
-        // Sábados, Segundas e Quartas
-        xpath = "//div[text()='18:05 -> 18:50']";
-        // Test
-        // xpath = "//div[text()='17:00 -> 17:45']";
-    }
+    // if (dateNow().getDay() === (0 || 2)) {
+    //     // Domingos e Terças
+    //     xpath = "//div[text()='18:00 -> 18:45']";
+    // } else {
+    //     // Sábados, Segundas e Quartas
+    //     xpath = "//div[text()='18:05 -> 18:50']";
+    //     // Test
+    //     // xpath = "//div[text()='17:00 -> 17:45']";
+    // }
 
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     let classDivElement = matchingElement.parentElement.parentElement;
