@@ -1,0 +1,61 @@
+{
+    "window.zoomLevel": -1,
+
+    // Controls the font family.
+    "editor.fontFamily": "SauceCodePro Nerd Font Mono",
+    // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
+    "editor.formatOnSave": false,
+
+    // Controls the font family of the terminal, this defaults to editor.fontFamily's value.
+    "terminal.integrated.fontFamily": "SauceCodePro NF",
+    "terminal.integrated.shell.windows": "C:\\Users\\ws765vc\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
+     // When set, text selected in the terminal will be copied to the clipboard.
+    "terminal.integrated.copyOnSelection": true,
+
+    // Controls auto save of dirty files. Accepted values:  'off', 'afterDelay', 'onFocusChange' (editor loses focus), 'onWindowChange' (window loses focus). If set to 'afterDelay', you can configure the delay in 'files.autoSaveDelay'.
+    "files.autoSave": "onFocusChange",
+
+    // To switch between localhost or 127.0.0.1 or anything else. Default is 127.0.0.1
+    "liveServer.settings.host": "0.0.0.0",
+
+    // Set Custom Port Number of Live Server. Set 0 if you want random port.
+    "liveServer.settings.port": 5000,
+
+    // Controls if the explorer should ask for confirmation to move files and folders via drag and drop.
+    "explorer.confirmDragAndDrop": false,
+
+    // If set to true, the extension will disable the project detection.
+    "vsicons.projectDetection.disableDetect": true,
+
+    // Enable some vim ctrl key commands that override otherwise common operations, like ctrl+c
+    "vim.useCtrlKeys": false,
+
+    // Override VSCode's copy command with our own copy command, which works better with VSCodeVim. Turn this off if copying is not working.
+    "vim.overrideCopy": false,
+
+    // If true, will use single instead of double quotes
+    "prettier.singleQuote": true,
+
+    // Turns auto fix on save on or off.
+    "eslint.autoFixOnSave": true,
+    "eslint.run": "onType",
+    "workbench.iconTheme": "vscode-icons",
+
+     // Use 'prettier-eslint' instead of 'prettier'. Other settings will only be fallbacks in case they could not be inferred from eslint rules.
+    "prettier.eslintIntegration": true,
+
+     // Fit code within this line limit
+    "prettier.printWidth": 80,
+
+      // Maximum amount of characters per line (0 = disable).
+    "html.format.wrapLineLength": 80,
+
+      // Wrap attributes.
+    "html.format.wrapAttributes": "force-expand-multiline"
+
+    // The proxy setting to use. If not set will be taken from the http_proxy and https_proxy environment variables
+    //"http.proxy": "http://ws765vc:'1q2w3e4r'@empweb1.ey.net:8080",
+    //"https.proxy": "https://ws765vc:'1q2w3e4r'@empweb1.ey.net:8443",
+    //"http.proxyStrictSSL": false,
+
+}
