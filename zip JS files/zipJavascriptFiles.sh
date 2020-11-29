@@ -4,7 +4,8 @@
 # This script creates a zip for every
 # Javascript file in the designated path
 #
-# Date: 20/02/2019
+# Created: 20/02/2019
+# Updated: 29/11/2020
 # Author: João Rocha
 #
 # Source: https://stackoverflow.com/questions/242538/unix-shell-script-find-out-which-directory-the-script-file-resides
