@@ -10,7 +10,7 @@ start();
 function start() {
     let checkTimeToBook = setInterval(() => {
         // Check if it's time to book class
-        console.log(dateNow().getHours() + 'h' + dateNow().getMinutes() + 'm' + dateNow().getSeconds() + 's | Checking if the it\s time to book..');
+        console.log(dateNow().getHours() + 'h' + dateNow().getMinutes() + 'm' + dateNow().getSeconds() + 's | Checking if it\'s time to book..');
 
         console.log(`dateNow: ${dateNow().getHours()}h${dateNow().getMinutes()}m${dateNow().getSeconds()}s | bookTime: ${bookingTime.hours}h${bookingTime.minutes}m `);
         console.log('Time to book? => ', dateNow().getHours() === bookingTime.hours && dateNow().getMinutes() === bookingTime.minutes);
@@ -34,10 +34,11 @@ function click2DaysFromNow() {
     // Get Today date
     let todayNumber = document.querySelectorAll('.calendar-day-today')[0].dataset.day;
     let todayMonth = document.querySelectorAll('.calendar-day-today')[0].dataset.month;
+    let todayYear = document.querySelectorAll('.calendar-day-today')[0].dataset.year;
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
-    let div2DaysFromToday = document.querySelectorAll('[data-year="2020"][data-month="' + todayMonth + '"][data-day="' + (parseInt(todayNumber) + 2) + '"]')[0]
+    let div2DaysFromToday = document.querySelectorAll('[data-year="'+ todayYear + '"][data-month="' + todayMonth + '"][data-day="' + (parseInt(todayNumber) + 2) + '"]')[0]
     div2DaysFromToday.click();
 
     clickInscrever();
