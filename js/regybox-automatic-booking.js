@@ -52,6 +52,10 @@ function clickInscrever() {
         xpath = "//div[text()='17:00 -> 17:45']";
     }
 
+    if (isZoom) {
+        xpath = "//div[text()='18:00 -> 19:00']";
+    }
+
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     let classDivElement = matchingElement.parentElement.parentElement;
     classDivElement.id = 'classDivElement';
@@ -66,5 +70,7 @@ function clickInscrever() {
 function isWednesday() {
     /* The value returned by getDay() is an integer corresponding to the day of the week:
     * 0 (Sunday) | 1 (Monday) | 2 (Tuesday) | 3 (Wednesday) | 4 (Thursday) | 5 (Friday) */
-    return dateNow().getDay() === 3;
+    return isZoom ? false : dateNow().getDay() === 3;
 }
+
+isZoom = true;
