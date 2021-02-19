@@ -1,9 +1,12 @@
 let dateNow = () => new Date(Date.now());
 
+isZoom = true;
+
 let bookingTime = {
     hours: isWednesday() ? 17 : 18,
     minutes: 0,
 }
+
 
 start();
 
@@ -73,4 +76,3 @@ function isWednesday() {
     return isZoom ? false : dateNow().getDay() === 3;
 }
 
-isZoom = true;
