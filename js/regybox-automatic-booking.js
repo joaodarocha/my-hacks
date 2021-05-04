@@ -1,12 +1,12 @@
 let dateNow = () => new Date(Date.now());
 
-isZoom = true;
+isZoom = false;
+isFridayDifferent = false;
 
 let bookingTime = {
     hours: isWednesday() ? 17 : 18,
-    minutes: 0,
+    minutes: 10,
 }
-
 
 start();
 
@@ -41,7 +41,7 @@ function click2DaysFromNow() {
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
-    let div2DaysFromToday = document.querySelectorAll('[data-year="'+ todayYear + '"][data-month="' + todayMonth + '"][data-day="' + (parseInt(todayNumber) + 2) + '"]')[0]
+    let div2DaysFromToday = document.querySelectorAll('[data-year="' + todayYear + '"][data-month="' + todayMonth + '"][data-day="' + (parseInt(todayNumber) + 2) + '"]')[0]
     div2DaysFromToday.click();
 
     clickInscrever();
@@ -49,10 +49,10 @@ function click2DaysFromNow() {
 
 function clickInscrever() {
     // Get the time of 18h class: 18:00 || 18:05
-    let xpath = "//div[text()='18:00 -> 18:45']";
+    let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isWednesday()) {
-        xpath = "//div[text()='17:00 -> 17:45']";
+        xpath = "//div[text()='17:00 -> 17:50']";
     }
 
     if (isZoom) {
@@ -73,6 +73,10 @@ function clickInscrever() {
 function isWednesday() {
     /* The value returned by getDay() is an integer corresponding to the day of the week:
     * 0 (Sunday) | 1 (Monday) | 2 (Tuesday) | 3 (Wednesday) | 4 (Thursday) | 5 (Friday) */
-    return isZoom ? false : dateNow().getDay() === 3;
+    if (isFridayDifferent) {
+        return isZoom ? false : dateNow().getDay() === 3;
+    } else {
+        return false;
+    }
 }
 
