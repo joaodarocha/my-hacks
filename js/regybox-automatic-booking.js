@@ -2,6 +2,7 @@ let dateNow = () => new Date(Date.now());
 
 isZoom = false;
 isFridayDifferent = false;
+isDevelopment = false;
 
 let bookingTime = {
     hours: isWednesday() ? 17 : 18,
@@ -11,6 +12,12 @@ let bookingTime = {
 start();
 
 function start() {
+
+    if (isDevelopment) {
+        bookingTime.hours = dateNow().getHours();
+        bookingTime.minutes = dateNow().getMinutes();
+    }
+
     let checkTimeToBook = setInterval(() => {
         // Check if it's time to book class
         console.log(dateNow().getHours() + 'h' + dateNow().getMinutes() + 'm' + dateNow().getSeconds() + 's | Checking if it\'s time to book..');
@@ -49,6 +56,7 @@ function click2DaysFromNow() {
 
 function clickInscrever() {
     // Get the time of 18h class: 18:00 || 18:05
+    // let xpath = `//div[text()='17:00 -> 17:50']`;
     let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isWednesday()) {
@@ -67,6 +75,9 @@ function clickInscrever() {
     let bookButton = document.querySelector('#classDivElement').querySelector('button.color-green');
     console.debug('Clicking INSCREVER');
     bookButton.click();
+
+    let okButton = document.querySelector('.dialog-button.dialog-button-bold')
+    okButton.click();
     console.debug('Time after booking!' + `| dateNow: ${dateNow().getHours()}h:${dateNow().getMinutes()}m${dateNow().getSeconds()}s${dateNow().getMilliseconds()}ms`);
 }
 
