@@ -1,13 +1,16 @@
 let dateNow = () => new Date(Date.now());
 
-isZoom = false;
-isFridayDifferent = false;
 isDevelopment = false;
 
 let bookingTime = {
-    hours: isWednesday() ? 17 : 18,
+    hours: 18,
     minutes: 10,
 }
+
+intervalTimeout = 1000;
+isBooked = false;
+checkTimeToBookInterval = () => {
+};
 
 start();
 
@@ -18,19 +21,30 @@ function start() {
         bookingTime.minutes = dateNow().getMinutes();
     }
 
-    let checkTimeToBook = setInterval(() => {
+    console.debug('Clicking today button');
+    let todayElement = document.querySelectorAll('.calendar-day-today')[0];
+    if (!todayElement) {
+        console.error('Cannot find the day to book!\n Did you open the calendar?');
+        console.debug('I\'m opening the calendar for you!');
+        // Abrir o calendário
+        document.querySelectorAll('a.link')[8].click();
+    }
+
+    checkTimeToBookInterval = setInterval(() => {
         // Check if it's time to book class
-        console.log(dateNow().getHours() + 'h' + dateNow().getMinutes() + 'm' + dateNow().getSeconds() + 's | Checking if it\'s time to book..');
+        console.log(printDateNow() + '| Checking if it\'s time to book..');
 
-        console.log(`dateNow: ${dateNow().getHours()}h${dateNow().getMinutes()}m${dateNow().getSeconds()}s | bookTime: ${bookingTime.hours}h${bookingTime.minutes}m `);
-        console.log('Time to book? => ', dateNow().getHours() === bookingTime.hours && dateNow().getMinutes() === bookingTime.minutes);
+        console.log(`dateNow: ${printDateNow()} | bookTime: ${bookingTime.hours}h${bookingTime.minutes}m `);
+        console.log('Time to book? => ', isTimeToBook());
 
-        if (dateNow().getHours() === bookingTime.hours && dateNow().getMinutes() === bookingTime.minutes) {
-            console.debug('Time to book is now!' + `| dateNow: ${dateNow().getHours()}h${dateNow().getMinutes()}m${dateNow().getSeconds()}s${dateNow().getMilliseconds()}ms`);
-            clickOnToday();
-            clearInterval(checkTimeToBook);
+        if (isTimeToBook()) {
+            console.debug('Time to book is now!' + `| dateNow: ${printDateNow()}`);
+            clickOnToday(checkTimeToBookInterval);
         }
-    }, 1000);
+        if (isBooked) {
+            clearInterval(checkTimeToBookInterval);
+        }
+    }, intervalTimeout);
 }
 
 function clickOnToday() {
@@ -42,16 +56,22 @@ function clickOnToday() {
 
 function click2DaysFromNow() {
     // Get Today date
-    let todayNumber = document.querySelectorAll('.calendar-day-today')[0].dataset.day;
-    let todayMonth = document.querySelectorAll('.calendar-day-today')[0].dataset.month;
-    let todayYear = document.querySelectorAll('.calendar-day-today')[0].dataset.year;
+    let todayDate = document.querySelectorAll('.calendar-day-today')[0].dataset;
+    let day = todayDate.day;
+    let month = todayDate.month;
+    let year = todayDate.year;
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
-    let div2DaysFromToday = document.querySelectorAll('[data-year="' + todayYear + '"][data-month="' + todayMonth + '"][data-day="' + (parseInt(todayNumber) + 2) + '"]')[0]
-    div2DaysFromToday.click();
+    let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + (parseInt(day) + 2) + '"]')[0]
 
-    clickInscrever();
+    if (!!div2DaysFromToday) {
+        div2DaysFromToday.click();
+        clickInscrever();
+    } else {
+        console.error('Cannot find the day to book!\n Did you open the calendar?');
+    }
+
 }
 
 function clickInscrever() {
@@ -59,35 +79,37 @@ function clickInscrever() {
     // let xpath = `//div[text()='17:00 -> 17:50']`;
     let xpath = `//div[text()='18:10 -> 19:00']`;
 
-    if (isWednesday()) {
-        xpath = "//div[text()='17:00 -> 17:50']";
-    }
-
-    if (isZoom) {
-        xpath = "//div[text()='18:00 -> 19:00']";
+    if (isDevelopment) {
+        xpath = "//div[text()='14:15 -> 15:45']";
     }
 
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    let classDivElement = matchingElement.parentElement.parentElement;
-    classDivElement.id = 'classDivElement';
+    if (matchingElement) {
 
-    // Click "INSCREVER" button
-    let bookButton = document.querySelector('#classDivElement').querySelector('button.color-green');
-    console.debug('Clicking INSCREVER');
-    bookButton.click();
+        let classToBook = matchingElement.parentElement.parentElement;
+        classToBook.id = 'classToBook';
 
-    let okButton = document.querySelector('.dialog-button.dialog-button-bold')
-    okButton.click();
-    console.debug('Time after booking!' + `| dateNow: ${dateNow().getHours()}h:${dateNow().getMinutes()}m${dateNow().getSeconds()}s${dateNow().getMilliseconds()}ms`);
+        // Click "INSCREVER" button
+        let bookButton = document.querySelector('#classToBook').querySelector('button.color-green');
+        console.debug('Clicking INSCREVER');
+        bookButton.click();
+
+        let okButton = document.querySelector('.dialog-button.dialog-button-bold')
+        console.debug('Clicking OK');
+        okButton.click();
+        isBooked = true;
+        console.debug('Time after booking!' + `| dateNow: ${printDateNow()}`);
+        // clearInterval(checkTimeToBookInterval);
+    } else {
+        console.error('Cannot find the button to book yet!');
+    }
 }
 
-function isWednesday() {
-    /* The value returned by getDay() is an integer corresponding to the day of the week:
-    * 0 (Sunday) | 1 (Monday) | 2 (Tuesday) | 3 (Wednesday) | 4 (Thursday) | 5 (Friday) */
-    if (isFridayDifferent) {
-        return isZoom ? false : dateNow().getDay() === 3;
-    } else {
-        return false;
-    }
+function printDateNow() {
+    return `${dateNow().getHours()}h:${dateNow().getMinutes()}m${dateNow().getSeconds()}s   (+${dateNow().getMilliseconds()}ms)`;
+}
+
+function isTimeToBook() {
+    return dateNow().getHours() === bookingTime.hours && dateNow().getMinutes() === bookingTime.minutes
 }
 
