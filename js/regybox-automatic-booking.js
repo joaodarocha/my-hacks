@@ -7,14 +7,16 @@ let bookingTime = {
     minutes: 10,
 }
 
-intervalTimeout = 1000;
-isBooked = false;
-checkTimeToBookInterval = () => {
+let intervalTimeout = 1000;
+let isBooked = false;
+let checkTimeToBookInterval = () => {
 };
 
 start();
 
 function start() {
+
+    iteration = 0;
 
     if (isDevelopment) {
         bookingTime.hours = dateNow().getHours();
@@ -33,15 +35,15 @@ function start() {
     checkTimeToBookInterval = setInterval(() => {
         // Check if it's time to book class
         console.log(printDateNow() + '| Checking if it\'s time to book..');
+        console.debug('Iteration = ', iteration++);
 
         console.log(`dateNow: ${printDateNow()} | bookTime: ${bookingTime.hours}h${bookingTime.minutes}m `);
         console.log('Time to book? => ', isTimeToBook());
+        console.log('Is Booked? =>', isBooked);
 
-        if (isTimeToBook()) {
+        if (isTimeToBook() && !isBooked) {
             console.debug('Time to book is now!' + `| dateNow: ${printDateNow()}`);
-            clickOnToday(checkTimeToBookInterval);
-        }
-        if (isBooked) {
+            clickOnToday(checkTimeToBookInterval)
             clearInterval(checkTimeToBookInterval);
         }
     }, intervalTimeout);
@@ -49,6 +51,7 @@ function start() {
 
 function clickOnToday() {
     console.debug('Clicking today button');
+    // console.debug(printDateNow());
     let todayElement = document.querySelectorAll('.calendar-day-today')[0];
     todayElement.click();
     click2DaysFromNow();
@@ -63,9 +66,10 @@ function click2DaysFromNow() {
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
+    // console.debug(printDateNow());
     let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + (parseInt(day) + 2) + '"]')[0]
 
-    if (!!div2DaysFromToday) {
+    if (!!div2DaysFromToday && !isBooked) {
         div2DaysFromToday.click();
         clickInscrever();
     } else {
@@ -80,26 +84,33 @@ function clickInscrever() {
     let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isDevelopment) {
-        xpath = "//div[text()='14:15 -> 15:45']";
+        xpath = "//div[text()='13:10 -> 14:00']";
     }
 
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    if (matchingElement) {
+    if (matchingElement && !isBooked) {
 
         let classToBook = matchingElement.parentElement.parentElement;
         classToBook.id = 'classToBook';
 
         // Click "INSCREVER" button
         let bookButton = document.querySelector('#classToBook').querySelector('button.color-green');
-        console.debug('Clicking INSCREVER');
-        bookButton.click();
+        if (bookButton && !isBooked) {
+            console.debug('Clicking INSCREVER');
+            bookButton.click();
+        }
 
         let okButton = document.querySelector('.dialog-button.dialog-button-bold')
-        console.debug('Clicking OK');
-        okButton.click();
-        isBooked = true;
-        console.debug('Time after booking!' + `| dateNow: ${printDateNow()}`);
-        // clearInterval(checkTimeToBookInterval);
+        // setTimeout(() => {
+        //     console.debug(printDateNow());
+        // }, 100);
+
+        if (okButton && !isBooked) {
+            console.debug('Clicking OK');
+            okButton.click();
+            console.debug('Time after booking!' + `| dateNow: ${printDateNow()}`);
+            isBooked = true;
+        }
     } else {
         console.error('Cannot find the button to book yet!');
     }
