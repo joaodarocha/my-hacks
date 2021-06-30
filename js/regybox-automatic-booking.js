@@ -1,6 +1,6 @@
 let dateNow = () => new Date(Date.now());
 
-isDevelopment = false;
+isDevelopment = true;
 
 let bookingTime = {
     hours: 18,
@@ -59,15 +59,18 @@ function clickOnToday() {
 
 function click2DaysFromNow() {
     // Get Today date
-    let todayDate = document.querySelectorAll('.calendar-day-today')[0].dataset;
-    let day = todayDate.day;
-    let month = todayDate.month;
-    let year = todayDate.year;
+    let today = new Date();
+    let dayAfterTomorrow = new Date();
+    dayAfterTomorrow.setDate(today.getDate() + 2);
+    let day = dayAfterTomorrow.getDate();
+    let month = dayAfterTomorrow.getMonth();
+    let year =dayAfterTomorrow.getFullYear();
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
+    console.log(`clicking date: ${day}/${month}/${year}`);
     // console.debug(printDateNow());
-    let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + (parseInt(day) + 2) + '"]')[0]
+    let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + day + '"]')[0]
 
     if (!!div2DaysFromToday && !isBooked) {
         div2DaysFromToday.click();
@@ -84,7 +87,8 @@ function clickInscrever() {
     let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isDevelopment) {
-        xpath = "//div[text()='13:10 -> 14:00']";
+        // xpath = "//div[text()='13:10 -> 14:00']";
+        xpath = `//div[text()='17:00 -> 17:50']`;
     }
 
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
