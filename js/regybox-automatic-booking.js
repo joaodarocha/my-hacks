@@ -4,7 +4,7 @@ isDevelopment = false;
 
 let bookingTime = {
     hours: 18,
-    minutes: 10,
+    minutes: 0
 }
 
 let isBooked = false;
@@ -98,7 +98,9 @@ function click2DaysFromNow() {
 function clickInscrever() {
     // Get the time of 18h class: 18:00 || 18:05
     // let xpath = `//div[text()='17:00 -> 17:50']`;
-    let xpath = `//div[text()='18:10 -> 19:00']`;
+    // let xpath = `//div[text()='18:10 -> 19:00']`;
+    // let xpath = `//div[text()='12:00 -> 12:50']`;
+    let xpath = `//div[text()='18:00 -> 18:50']`;
 
     if (isDevelopment) {
         xpath = "//div[text()='13:10 -> 14:00']";
