@@ -9,8 +9,7 @@ let bookingTime = {
 
 let intervalTimeout = 1000;
 let isBooked = false;
-let checkTimeToBookInterval = () => {
-};
+
 
 start();
 
@@ -32,7 +31,7 @@ function start() {
         document.querySelectorAll('a.link')[8].click();
     }
 
-    checkTimeToBookInterval = setInterval(() => {
+    const checkTimeToBookInterval = setInterval(() => {
         // Check if it's time to book class
         console.log(printDateNow() + '| Checking if it\'s time to book..');
         console.debug('Iteration = ', iteration++);
@@ -64,11 +63,11 @@ function click2DaysFromNow() {
     dayAfterTomorrow.setDate(today.getDate() + 2);
     let day = dayAfterTomorrow.getDate();
     let month = dayAfterTomorrow.getMonth();
-    let year =dayAfterTomorrow.getFullYear();
+    let year = dayAfterTomorrow.getFullYear();
 
     // Click 2 days from today
     console.debug('Clicking 2 days from now');
-    console.log(`clicking date: ${day}/${month}/${year}`);
+    console.log(`clicking date: ${day}/${month + 1}/${year}`);
     // console.debug(printDateNow());
     let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + day + '"]')[0]
 
@@ -82,9 +81,10 @@ function click2DaysFromNow() {
 }
 
 function clickInscrever() {
-    // Get the time of 18h class: 18:00 || 18:05
-    // let xpath = `//div[text()='17:00 -> 17:50']`;
-    // let xpath = `//div[text()='18:00 -> 18:50']`;
+// let xpath = `//div[text()='12:00 -> 12:50']`;
+// let xpath = `//div[text()='17:00 -> 17:50']`;
+// let xpath = `//div[text()='18:00 -> 18:50']`;
+// Get the time of 18h class: 18:00 || 18:05
     let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isDevelopment) {
