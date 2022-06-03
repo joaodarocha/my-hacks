@@ -1,25 +1,43 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Ignore "completion-dependent directories detected" error
+ZSH_DISABLE_COMPFIX=true
+
 # Path to your oh-my-zsh installation.
  export ZSH=/$HOME/.oh-my-zsh
 
+#Supress ZSH initialization warning
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
 # ZSH THEME #
- ZSH_THEME="powerlevel9k/powerlevel9k"
+ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 ### POWERLEVEL9k SETTING ###
  # POWERLEVEL9K MODE
  POWERLEVEL9K_MODE='nerdfont-complete'
- #By default, powerlevel9k is a single-lined prompt. If you would like to have the segments display on one line
+ #By default, powerlevel10k is a single-lined prompt. If you would like to have the segments display on one line
  POWERLEVEL9K_PROMPT_ON_NEWLINE=true
  # If you would like to add a newline after each prompt / print loop
  POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
  POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
  POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir vcs)
- POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(virtualenv date)
+ POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
+ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(virtualenv nvm date)
  POWERLEVEL9K_DATE_FORMAT="%D{%H:%M \uf017 %d.%m.%y}"
  POWERLEVEL9K_OS_ICON_BACKGROUND="white"
  POWERLEVEL9K_OS_ICON_FOREGROUND="black"
  POWERLEVEL9K_DIR_HOME_FOREGROUND="white"
  POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="white"
- POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="white"
+ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="white"§
  POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
  POWERLEVEL9K_SHORTEN_DIR_LENGTH=6
 
@@ -40,34 +58,81 @@
  source $ZSH/oh-my-zsh.sh
 
 # Plugins
- source $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # NVM configs
- export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Rbenv
- export PATH="$HOME/.rbenv/bin:$PATH"
- eval "$(rbenv init -)"
+# NVM: load node version from .nvmrc
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
 
-# Rbens PATH
- export PATH=/$HOME/.npm-global/bin:/$HOME/.npm-global/bin:/$HOME/.rbenv/shims:/$HOME/.rbenv/bin:/$HOME/bin:/$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
 
-# Yarn
- export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
 
-# Rbenv - ruby-build
- export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/joao.rocha/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/joao.rocha/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
-# Elastic Beanstalk CLI
- export PATH="$HOME/.local/bin:$PATH"
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/joao.rocha/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/joao.rocha/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
-# PostGreSQL
- export PATH="/usr/local/opt/postgresql@12/bin:$PATH"
+# pyenv - The power of pyenv comes from its control over our shell's path.
+# In order for it to work correctly, we need to add the following to our configuration file
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+# Activate Python virtualenv
+autoload -U add-zsh-hook
+activate-venv() {
+  if [[ -z "$VIRTUAL_ENV" ]] ; then
+      echo "No activated virtualenv found."
+      ## If venv folder is found then activate the vitualenv
+      if [[ -e ./venv/bin/activate ]] ; then
+	echo "Activating virtualenv in $PWD/venv/bin/activate"
+        source ./venv/bin/activate
+	echo "Activated $(python -V)"
+      fi
+  else
+    ## check the current folder belong to earlier VIRTUAL_ENV folder
+    # if yes then do nothing
+    # else deactivate
+      parentdir="$(dirname "$VIRTUAL_ENV")"
+      if [[ "$PWD" != "$parentdir" ]] ; then
+	echo "Deactivating previous virtualenv"
+        deactivate
+        if [[ -e ./venv/bin/activate ]] ; then
+	  echo "Activating virtualenv in $PWD/venv/bin/activate"
+          source ./venv/bin/activate
+	  echo "Activated $(python -V)"
+        fi
+      fi
+  fi
+}
+add-zsh-hook chpwd activate-venv
+activate-venv
 
 # Aliases
 # For a full list of active aliases, run `alias`.
+ alias sourceZshConfig="source ~/.zshrc"
  alias zshconfig="vim ~/.zshrc"
  alias ohmyzsh="cd ~/.oh-my-zsh"
  alias gitconfig="vim ~/.gitconfig"
@@ -76,6 +141,12 @@
  alias rs="rails s -b 'ssl://0.0.0.0:3000?key=./localhost/localhost.key&cert=./localhost/localhost.crt'"
  alias rake='noglob rake'
  alias ignoreFile="git update-index --assume-unchanged path/to/file"
- alias unIgnoreFile="git update-index --no-assume-unchanged path/to/file"
-
-
+ alias unIgnoreFile="git update-index --no-assume-unchanged env.default.yaml"
+ alias fixXcode='sudo rm -rf $(xcode-select -print-path) && xcode-select --install'
+ alias fixProtobuf="node_modules/@google/bracket/python/env/bin/pip uninstall --yes protobuf && node_modules/@google/bracket/python/env/bin/pip install 'protobuf>=3.19.4,<3.20'"
+ alias CampusAddGoogleRemote="git remote add google ssh://joao.rocha@bynd.com@source.developers.google.com:2022/p/gweb-dev-campus-k-frontend/r/gweb-dev-campus-k-frontend && git remote set-url --add google ssh://joao.rocha@bynd.com@source.developers.google.com:2022/p/gweb-qa-campus-k-frontend/r/gweb-qa-campus-k-frontend"
+ alias CampusAddGitlabRemote="git remote add gitlab git@gsc.bynd.com:google-sf/campus.git"
+ alias CampusRemoveGoogleRemote="git remote remove google"
+ alias CampusRemoveGitlabRemote="git remote remove gitlab"
+ alias MTrainAddGoogleRemote="git remote add google ssh://joao.rocha@bynd.com@source.developers.google.com:2022/p/marketing-training-hub-dev/r/marketing-training-hub-dev"
+ alias MTrainRemoveGoogleRemote="git remote remove google"
