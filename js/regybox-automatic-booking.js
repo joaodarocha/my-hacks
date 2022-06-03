@@ -3,8 +3,8 @@ let dateNow = () => new Date(Date.now());
 isDevelopment = false;
 
 let bookingTime = {
-    hours: 18,
-    minutes: 10,
+    hours: 12,
+    minutes: 0,
 }
 
 let intervalTimeout = 1000;
@@ -81,11 +81,11 @@ function click2DaysFromNow() {
 }
 
 function clickInscrever() {
-// let xpath = `//div[text()='12:00 -> 12:50']`;
-// let xpath = `//div[text()='17:00 -> 17:50']`;
-// let xpath = `//div[text()='18:00 -> 18:50']`;
-// Get the time of 18h class: 18:00 || 18:05
-    let xpath = `//div[text()='18:10 -> 19:00']`;
+    let xpath = `//div[text()='12:00 -> 12:50']`;
+    // let xpath = `//div[text()='17:00 -> 17:50']`;
+    // let xpath = `//div[text()='18:00 -> 18:50']`;
+    // Get the time of 18h class: 18:00 || 18:05
+    // let xpath = `//div[text()='18:10 -> 19:00']`;
 
     if (isDevelopment) {
         // xpath = "//div[text()='13:10 -> 14:00']";
