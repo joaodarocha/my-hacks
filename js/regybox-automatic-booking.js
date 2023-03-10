@@ -3,7 +3,7 @@ let dateNow = () => new Date(Date.now());
 isDevelopment = false;
 
 let bookingTime = {
-    hours: 12,
+    hours: 13,
     minutes: 0,
 }
 
@@ -53,26 +53,26 @@ function clickOnToday() {
     // console.debug(printDateNow());
     let todayElement = document.querySelectorAll('.calendar-day-today')[0];
     todayElement.click();
-    click2DaysFromNow();
+    clickingOnDayToBook();
 }
 
-function click2DaysFromNow() {
+function clickingOnDayToBook() {
     // Get Today date
     let today = new Date();
-    let dayAfterTomorrow = new Date();
-    dayAfterTomorrow.setDate(today.getDate() + 2);
-    let day = dayAfterTomorrow.getDate();
-    let month = dayAfterTomorrow.getMonth();
-    let year = dayAfterTomorrow.getFullYear();
+    let dayOfClass = new Date();
+    dayOfClass.setDate(today.getDate() + 3);
+    let day = dayOfClass.getDate();
+    let month = dayOfClass.getMonth();
+    let year = dayOfClass.getFullYear();
 
-    // Click 2 days from today
-    console.debug('Clicking 2 days from now');
+    // Click on day of class
+    console.debug('Clicking 3 days from now');
     console.log(`clicking date: ${day}/${month + 1}/${year}`);
     // console.debug(printDateNow());
-    let div2DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + day + '"]')[0]
+    let div3DaysFromToday = document.querySelectorAll('[data-year="' + year + '"][data-month="' + month + '"][data-day="' + day + '"]')[0]
 
-    if (!!div2DaysFromToday && !isBooked) {
-        div2DaysFromToday.click();
+    if (!!div3DaysFromToday && !isBooked) {
+        div3DaysFromToday.click();
         clickInscrever();
     } else {
         console.error('Cannot find the day to book!\n Did you open the calendar?');
@@ -81,15 +81,13 @@ function click2DaysFromNow() {
 }
 
 function clickInscrever() {
-    let xpath = `//div[text()='12:00 -> 12:50']`;
-    // let xpath = `//div[text()='17:00 -> 17:50']`;
-    // let xpath = `//div[text()='18:00 -> 18:50']`;
-    // Get the time of 18h class: 18:00 || 18:05
-    // let xpath = `//div[text()='18:10 -> 19:00']`;
+    // let xpath = `//div[text()='11:00 -> 12:00']`;
+    let xpath = `//div[text()='18:00 -> 19:00']`;
 
     if (isDevelopment) {
+        xpath = `//div[text()='08:00 -> 09:00']`;
         // xpath = "//div[text()='13:10 -> 14:00']";
-        xpath = `//div[text()='17:00 -> 17:50']`;
+        // xpath = `//div[text()='16:30 -> 17:30']`;
     }
 
     let matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
