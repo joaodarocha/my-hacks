@@ -1,3 +1,14 @@
+/*
+
+* Description:
+*   This scripts automatically endorses all skills on a LinkedIn profile
+*
+* Created: 25/05/2024
+* Updated: 25/05/2024
+* Author: João Rocha
+*
+*/
+
 let interval = null;
 let skills = null;
 const endorseBtnSelector = "button.artdeco-button .artdeco-button__text";
