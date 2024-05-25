@@ -1,3 +1,14 @@
+/*
+
+* Description:
+*   This scripts automatically books a class on RegyBox
+*
+* Created: 21/10/2020
+* Updated: 10/03/2023
+* Author: João Rocha
+*
+*/
+
 let dateNow = () => new Date(Date.now());
 
 isDevelopment = false;
