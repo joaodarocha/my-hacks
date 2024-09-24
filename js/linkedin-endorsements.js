@@ -1,7 +1,7 @@
 /*
 
 * Description:
-*   This scripts automatically endorses all skills on a LinkedIn profile
+*   This script automatically endorses all skills on a LinkedIn profile
 *
 * Created: 25/05/2024
 * Updated: 25/05/2024
@@ -36,6 +36,7 @@ const run = () => {
                 run();
             }, 2000);
         } else {
+            skills = getSkillsToEndorse();
             console.log(skills);
             if (!skills.length) {
                 stop();
