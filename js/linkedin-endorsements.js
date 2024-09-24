@@ -4,7 +4,7 @@
 *   This script automatically endorses all skills on a LinkedIn profile
 *
 * Created: 25/05/2024
-* Updated: 25/05/2024
+* Updated: 24/09/2024
 * Author: João Rocha
 *
 */
